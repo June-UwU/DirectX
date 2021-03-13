@@ -15,14 +15,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	}
 	catch (const Appception& e)
 	{
-		MessageBox(nullptr,(LPCWSTR) e.what(), nullptr, MB_OK);
+		MessageBoxA(nullptr, e.what(), nullptr, MB_OK);
 	}
 	catch (const std::exception& e)
 	{
-		MessageBox(nullptr, (LPCWSTR)e.what(), nullptr, MB_OK);
+		MessageBoxA(nullptr, e.what(), nullptr, MB_OK);
 	}
 	catch (...)
 	{
-		MessageBox(nullptr, (LPCWSTR)"no info..you are on your own", nullptr, MB_OK);
+		MessageBoxA(nullptr, "no info..you are on your own", nullptr, MB_OK);
 	}
 }

@@ -6,10 +6,16 @@ Window::Window()
 {
 	handle = CreateWindowEx(0,WindowsProp::GetName(), L"DirectX ", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 		nullptr, nullptr, WindowsProp::GetInstance(), nullptr);
-
+	
 	ShowWindow(handle, SW_SHOWDEFAULT);
-	throw WND_ERROR(ERROR_INVALID_FUNCTION);
-
+	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
+	if (cond)
+	{
+		OutputDebugString(L"work dammit...!");
+	}*/
+	//throw WND_ERROR(ERROR_INVALID_FUNCTION);
+	//throw Appception(__LINE__,__FILE__);
+	throw std::invalid_argument("shit");
 }
 
 
@@ -43,6 +49,7 @@ Window::WindowsProp::WindowsProp()
 
 	RegisterClass(&wc);
 
+	
 }
 
 const wchar_t* Window::WindowsProp::GetName()
@@ -65,7 +72,7 @@ std::string Window::Winception::TranslateHRESULT() const noexcept
 {
 	LPTSTR temp = {};
 	DWORD count = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
-		0x0009, temp, 0, nullptr);
+		MAKELANGID(SUBLANG_ENGLISH_UK ,LANG_ENGLISH), temp, 0, nullptr);
 	if (count == 0)
 	{
 		return "unidentified error";
