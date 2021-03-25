@@ -6,8 +6,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		Window window = Window();
 
 		MSG message;
-		INT res;
-		while ((res = GetMessage(&message, window.GetHandle(), 0, 0)) > 0)
+		while (GetMessage(&message, window.GetHandle(), 0, 0) > 0)
 		{
 			TranslateMessage(&message);
 			DispatchMessage(&message);

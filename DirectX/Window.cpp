@@ -5,9 +5,8 @@ Window::WindowsProp Window::WindowsProp::Prop;
 Window::Window()
 {
 	handle = CreateWindowEx(0,WindowsProp::GetName(), L"DirectX ", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-		nullptr, nullptr, WindowsProp::GetInstance(), nullptr);
+		nullptr, nullptr, WindowsProp::GetInstance(), this);
 	
-	ShowWindow(handle, SW_SHOWDEFAULT);
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
 	if (cond)
 	{
@@ -15,7 +14,7 @@ Window::Window()
 	}*/
 	//throw WND_ERROR(ERROR_INVALID_FUNCTION);
 	//throw Appception(__LINE__,__FILE__);
-	throw std::invalid_argument("shit");
+	//throw std::invalid_argument("shit");
 }
 
 
@@ -26,16 +25,47 @@ HWND Window::GetHandle()
 
 LRESULT Window::Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-		switch (msg)
-		{
-		case WM_QUIT:
-		{
-			PostQuitMessage(0);
-			return 0;
-		}break;
-		}
-		return DefWindowProc(handle, msg, wParam, lParam);
+	if (msg == WM_NCCREATE)
+	{
+		const CREATESTRUCT* const pCreate = (CREATESTRUCT*)(lParam);
+		Window const* pWnd = (Window*)pCreate->lpCreateParams;
+		SetWindowLongPtr(handle, GWLP_USERDATA, LONG_PTR(pCreate));
+		SetWindowLongPtr(handle, GWLP_WNDPROC, LONG_PTR(Tans));
+		return pWnd->Tans(handle, msg, wParam, lParam);
+	}
+	
+	return DefWindowProc(handle, msg, wParam, lParam);
 }
+
+LRESULT Window::Tans(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	Window* const pWnd = (Window *)GetWindowLongPtr(handle, GWLP_USERDATA);
+	ShowWindow(handle, SW_SHOWDEFAULT);
+	return pWnd->MessHandle(handle, msg, wParam, lParam);
+}
+
+LRESULT Window::MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT Result = 0;
+	switch (msg)
+	{
+	case WM_CLOSE:
+	{
+		PostQuitMessage(0);
+		Result = 0;
+	}break;
+	case WM_QUIT:
+	{
+		Result = 0;	
+	}break;
+	default:
+	{
+		Result = DefWindowProc(handle, msg, wParam, lParam);
+	}
+	}
+	return Result;
+}
+
 
 Window::WindowsProp::WindowsProp()
 	:instance(GetModuleHandle(nullptr))

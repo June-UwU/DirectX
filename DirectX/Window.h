@@ -35,5 +35,7 @@ private:
 	};
 	
 	static LRESULT CALLBACK Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK Tans(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
 	HWND handle;
 };
