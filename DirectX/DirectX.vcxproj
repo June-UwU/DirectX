@@ -159,10 +159,12 @@
   <ItemGroup>
     <ClCompile Include="Appception.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="KeyBoard.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Appception.h" />
+    <ClInclude Include="KeyBoard.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

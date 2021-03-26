@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Appception.h"
+#include "KeyBoard.h"
 #define WND_ERROR(hr) Winception(__LINE__,__FILE__,hr)
 class Window
 {
@@ -9,6 +10,8 @@ public:
 	Window(Window& rhs) = delete;
 	Window operator=(Window& rhs) = delete;
 	HWND GetHandle();
+private:
+	KeyBoard kbd;
 private:
 	class Winception : public Appception
 	{
@@ -33,7 +36,7 @@ private:
 		HINSTANCE instance;
 	    static WindowsProp Prop;
 	};
-	
+private:
 	static LRESULT CALLBACK Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK Tans(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);

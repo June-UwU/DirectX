@@ -12,7 +12,7 @@ Window::Window()
 	{
 		OutputDebugString(L"work dammit...!");
 	}*/
-	//throw WND_ERROR(ERROR_INVALID_FUNCTION);
+	throw WND_ERROR(ERROR_FAIL_RESTART);
 	//throw Appception(__LINE__,__FILE__);
 	//throw std::invalid_argument("shit");
 }
@@ -49,6 +49,18 @@ LRESULT Window::MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 	LRESULT Result = 0;
 	switch (msg)
 	{
+	case WM_KEYDOWN:
+	{
+		kbd.KeyPressedEvent(wParam);
+	}break;
+	case WM_KEYUP:
+	{
+		kbd.KeyReleasedEvent(wParam);
+	}break;
+	case WM_KILLFOCUS:
+	{
+		kbd.ClearBindings();
+	}break;
 	case WM_CLOSE:
 	{
 		PostQuitMessage(0);
@@ -100,9 +112,9 @@ Window::Winception::Winception(int line, const char* file, HRESULT hr) noexcept
 
 std::string Window::Winception::TranslateHRESULT() const noexcept
 {
-	LPTSTR temp = {};
-	DWORD count = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
-		MAKELANGID(SUBLANG_ENGLISH_UK ,LANG_ENGLISH), temp, 0, nullptr);
+	char* temp = nullptr;
+	DWORD count = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
+		MAKELANGID(SUBLANG_ENGLISH_UK ,LANG_ENGLISH),LPSTR(&temp), 0, nullptr);
 	if (count == 0)
 	{
 		return "unidentified error";

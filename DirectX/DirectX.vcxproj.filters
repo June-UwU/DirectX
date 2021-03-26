@@ -3,8 +3,12 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Appception.cpp" />
+    <ClCompile Include="KeyBoard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Appception.h" />
+    <ClInclude Include="KeyBoard.h" />
   </ItemGroup>
 </Project>
