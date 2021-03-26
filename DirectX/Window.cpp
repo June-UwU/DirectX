@@ -12,7 +12,7 @@ Window::Window()
 	{
 		OutputDebugString(L"work dammit...!");
 	}*/
-	throw WND_ERROR(ERROR_FAIL_RESTART);
+	throw WND_ERROR(ERROR_ARENA_TRASHED);
 	//throw Appception(__LINE__,__FILE__);
 	//throw std::invalid_argument("shit");
 }
@@ -112,23 +112,26 @@ Window::Winception::Winception(int line, const char* file, HRESULT hr) noexcept
 
 std::string Window::Winception::TranslateHRESULT() const noexcept
 {
-	char* temp = nullptr;
+	char* temp = { 0 };
 	DWORD count = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
-		MAKELANGID(SUBLANG_ENGLISH_UK ,LANG_ENGLISH),LPSTR(&temp), 0, nullptr);
+		LANG_SYSTEM_DEFAULT,LPSTR(&temp), 0, nullptr);
 	if (count == 0)
 	{
 		return "unidentified error";
 	}
+	std::string ErrorString = temp;
 
-	return (char*)temp;
+	LocalFree(temp);
+
+	return ErrorString;
 }
 
 const char* Window::Winception::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << "WINDOWS ERROR!" << std::endl
-		<< "[CODE] 0x" << std::hex <<hr <<std::endl
-		<< "[DESCRIPTION]" << TranslateHRESULT()
+		<< "[CODE] 0x" << std::hex << hr << std::endl
+		<< "[DESCRIPTION]" << TranslateHRESULT() << std::endl
 		<< "[LINE]" << GetLine() << std::endl
 		<< "[FILE]" << GetFile() << std::endl;
 	data = oss.str();
