@@ -132,7 +132,7 @@ const char* Window::Winception::what() const noexcept
 	oss << "WINDOWS ERROR!" << std::endl
 		<< "[CODE] 0x" << std::hex << hr << std::endl
 		<< "[DESCRIPTION]" << TranslateHRESULT() << std::endl
-		<< "[LINE]" << GetLine() << std::endl
+		<< "[LINE]" << std::dec << (unsigned int)GetLine() << std::endl
 		<< "[FILE]" << GetFile() << std::endl;
 	data = oss.str();
 	return data.c_str();

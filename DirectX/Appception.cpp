@@ -27,7 +27,7 @@ const char* Appception::what() const noexcept
     std::ostringstream temp;
     temp << Type() << std::endl
         << "[FILE]" << file << std::endl
-        << "[LINE]" << line << std::endl;
+        << "[LINE]" << std::dec << line << std::endl;
     data = temp.str();
     return data.c_str();
 }
