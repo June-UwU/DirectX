@@ -1,65 +1,61 @@
 #pragma once
-
 #include <bitset>
 #include <queue>
 #include <optional>
+
 class KeyBoard
 {
 	friend class Window;
 private:
+	//private internal classes
 	class KeyEvent
 	{
 	public:
-		enum class Type
+		enum class TYPE
 		{
-			Invalid,
-			KeyDown,
-			KeyUp,
+			Press,
+			Release
 		};
-		KeyEvent(Type type, unsigned char code)
+	private:
+		TYPE type;
+		unsigned char code;
+	public:
+		KeyEvent(TYPE type, unsigned char code) noexcept
 			:type(type)
 			, code(code)
 		{}
-		const bool IsPressed() noexcept
+		bool IsKeyPress() noexcept
 		{
-			return type == Type::KeyDown;
+			return type == KeyEvent::TYPE::Press;
 		}
-		const bool IsReleased() noexcept
+		bool IsKeyRelease() noexcept
 		{
-			return type == Type::KeyUp;
+			return type == KeyEvent::TYPE::Release;
 		}
-		Type type;
-		unsigned char code;
 	};
 public:
-	KeyBoard() noexcept;
-	KeyBoard(const KeyBoard& rhs) = delete;
-	KeyBoard& operator =(const KeyBoard& rhs) = delete;
-	bool CharQueueEmpty() noexcept;
-	std::optional<KeyEvent> GetEvent() noexcept;
-	std::optional<char> ReadChar() noexcept;
-	void FlushQueue() noexcept;
-	bool  AutoRepeatEnable = true;
+	KeyBoard() noexcept = default;
+	//auto repeat variable
+	bool ENABLE_AUTO_REPEAT = 1;
 private:
-	void CharEvent(char  character) noexcept;
-	void KeyPressedEvent(char code) noexcept;
-	void KeyReleasedEvent(char code) noexcept;
-	void ClearBindings() noexcept;
+	void KeyPressedEvent(unsigned char code) noexcept;
+	void KeyReleasedEvent(unsigned char code) noexcept;
+	void ClearState() noexcept;
 	template <typename T>
-	void TrimBuffer(std::queue<T>& buffer) noexcept;
+	static void TrimBuffer(std::queue<T>& Buffer) noexcept;
 private:
-	static const std::size_t Max_KeyCodes = 256u;
-	static const std::size_t Max_Queue_Size = 16u;
-	std::bitset<Max_KeyCodes> Bindings;
-	std::queue<KeyEvent> KeyQueue;
+	static const unsigned int MAX_BITSET_LENGTH = 256u;
+	static const unsigned int MAX_QUEUE_LENGTH = 16u;
+	std::bitset<MAX_BITSET_LENGTH> Bindings;
 	std::queue<char> CharQueue;
+	std::queue<KeyEvent> KeyEventQueue;
 };
 
 template<typename T>
-inline void KeyBoard::TrimBuffer(std::queue<T>& buffer) noexcept
+inline static void KeyBoard::TrimBuffer(std::queue<T>& Buffer) noexcept
 {
-	while (buffer.size() > Max_Queue_Size)
+	while (Buffer.size() > MAX_QUEUE_LENGTH)
 	{
-		buffer.pop();
+		Buffer.pop();
 	}
 }

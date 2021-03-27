@@ -1,63 +1,21 @@
 #include "KeyBoard.h"
 
-KeyBoard::KeyBoard() noexcept
+void KeyBoard::KeyPressedEvent(unsigned char code) noexcept
 {
+	Bindings[code] = 1;
+	KeyEventQueue.emplace(KeyBoard::KeyEvent(KeyBoard::KeyEvent::TYPE::Press, code));
+	TrimBuffer(KeyEventQueue);
 }
 
-bool KeyBoard::CharQueueEmpty() noexcept
+void KeyBoard::KeyReleasedEvent(unsigned char code) noexcept
 {
-	return CharQueue.empty();
+	Bindings[code] = 0;
+	KeyEventQueue.emplace(KeyBoard::KeyEvent(KeyBoard::KeyEvent::TYPE::Press, code));
+	TrimBuffer(KeyEventQueue);
 }
 
-std::optional<KeyBoard::KeyEvent> KeyBoard::GetEvent() noexcept
-{
-	if (KeyQueue.size() > -1)
-	{
-		KeyEvent Event = KeyQueue.front();
-		KeyQueue.pop();
-		return Event;
-	}
-	return {};
-}
-
-std::optional<char> KeyBoard::ReadChar() noexcept
-{
-	if (CharQueue.size() > -1)
-	{
-		char Event = CharQueue.front();
-		CharQueue.pop();
-		return Event;
-	}
-	return {};
-}
-
-void KeyBoard::FlushQueue() noexcept
-{
-	CharQueue = std::queue<char>();
-	KeyQueue = std::queue<KeyEvent>();
-}
-
-void KeyBoard::CharEvent(char character) noexcept
-{
-	CharQueue.emplace(character);
-	TrimBuffer(CharQueue);
-}
-
-void KeyBoard::KeyPressedEvent(char code) noexcept
-{
-	Bindings[code] = true;
-	KeyQueue.emplace(KeyEvent(KeyEvent::KeyEvent::Type::KeyDown, code));
-	TrimBuffer(KeyQueue);
-}
-
-void KeyBoard::KeyReleasedEvent(char code) noexcept
-{
-	Bindings[code];
-	KeyQueue.emplace(KeyEvent(KeyEvent::Type::KeyUp, code));
-	TrimBuffer(KeyQueue);
-}
-
-void KeyBoard::ClearBindings() noexcept
+void KeyBoard::ClearState() noexcept
 {
 	Bindings.reset();
 }
+

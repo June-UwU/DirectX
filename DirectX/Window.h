@@ -10,7 +10,7 @@ public:
 	Window(Window& rhs) = delete;
 	Window operator=(Window& rhs) = delete;
 	HWND GetHandle();
-private:
+public:
 	KeyBoard kbd;
 private:
 	class Winception : public Appception

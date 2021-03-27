@@ -12,7 +12,7 @@ Window::Window()
 	{
 		OutputDebugString(L"work dammit...!");
 	}*/
-	throw WND_ERROR(ERROR_ARENA_TRASHED);
+	//throw WND_ERROR(ERROR_ARENA_TRASHED);
 	//throw Appception(__LINE__,__FILE__);
 	//throw std::invalid_argument("shit");
 }
@@ -51,24 +51,24 @@ LRESULT Window::MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 	{
-		kbd.KeyPressedEvent(wParam);
+		kbd.KeyPressedEvent(unsigned char(wParam));
 	}break;
 	case WM_KEYUP:
 	{
-		kbd.KeyReleasedEvent(wParam);
+		kbd.KeyReleasedEvent(unsigned char(wParam));
 	}break;
 	case WM_KILLFOCUS:
 	{
-		kbd.ClearBindings();
 	}break;
 	case WM_CLOSE:
 	{
-		PostQuitMessage(0);
 		Result = 0;
+		PostQuitMessage(0);
 	}break;
 	case WM_QUIT:
 	{
 		Result = 0;	
+		PostQuitMessage(0);
 	}break;
 	default:
 	{
