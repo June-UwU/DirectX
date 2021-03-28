@@ -6,6 +6,10 @@
 class KeyBoard
 {
 	friend class Window;
+public:
+	KeyBoard() = default;
+	//auto repeat variable
+	bool ENABLE_AUTO_REPEAT = 1;
 private:
 	//private internal classes
 	class KeyEvent
@@ -33,29 +37,17 @@ private:
 			return type == KeyEvent::TYPE::Release;
 		}
 	};
-public:
-	KeyBoard() noexcept = default;
-	//auto repeat variable
-	bool ENABLE_AUTO_REPEAT = 1;
+private:
+	static const unsigned int MAX_BITSET_LENGTH = 256u;
+	static const unsigned int MAX_QUEUE_LENGTH = 16u;
+	std::bitset<MAX_BITSET_LENGTH> Bindings;
+	std::queue<char> CharQueue ;
+	std::queue<KeyBoard::KeyEvent> KeyEventQueue ;
 private:
 	void KeyPressedEvent(unsigned char code) noexcept;
 	void KeyReleasedEvent(unsigned char code) noexcept;
 	void ClearState() noexcept;
 	template <typename T>
 	static void TrimBuffer(std::queue<T>& Buffer) noexcept;
-private:
-	static const unsigned int MAX_BITSET_LENGTH = 256u;
-	static const unsigned int MAX_QUEUE_LENGTH = 16u;
-	std::bitset<MAX_BITSET_LENGTH> Bindings;
-	std::queue<char> CharQueue;
-	std::queue<KeyEvent> KeyEventQueue;
 };
 
-template<typename T>
-inline static void KeyBoard::TrimBuffer(std::queue<T>& Buffer) noexcept
-{
-	while (Buffer.size() > MAX_QUEUE_LENGTH)
-	{
-		Buffer.pop();
-	}
-}

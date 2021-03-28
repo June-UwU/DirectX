@@ -29,7 +29,7 @@ LRESULT Window::Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		const CREATESTRUCT* const pCreate = (CREATESTRUCT*)(lParam);
 		Window const* pWnd = (Window*)pCreate->lpCreateParams;
-		SetWindowLongPtr(handle, GWLP_USERDATA, LONG_PTR(pCreate));
+		SetWindowLongPtr(handle, GWLP_USERDATA, LONG_PTR(pWnd));
 		SetWindowLongPtr(handle, GWLP_WNDPROC, LONG_PTR(Tans));
 		return pWnd->Tans(handle, msg, wParam, lParam);
 	}
@@ -70,11 +70,8 @@ LRESULT Window::MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 		Result = 0;	
 		PostQuitMessage(0);
 	}break;
-	default:
-	{
-		Result = DefWindowProc(handle, msg, wParam, lParam);
 	}
-	}
+	Result = DefWindowProc(handle, msg, wParam, lParam);
 	return Result;
 }
 
