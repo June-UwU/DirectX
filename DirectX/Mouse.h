@@ -55,6 +55,9 @@ public:
 	int GetX() noexcept;
 	int GetY() noexcept;
 	std::optional<MouseEvent> ReadBuffer() noexcept;
+	bool LeftDown() noexcept;
+	bool RightDown() noexcept;
+	bool MiddleDown() noexcept;
 	void Reset() noexcept;
 	void FlushQueue() noexcept;
 private:

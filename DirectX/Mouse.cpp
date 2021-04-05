@@ -26,6 +26,21 @@ std::optional < Mouse:: MouseEvent > Mouse::ReadBuffer() noexcept
 	return {};
 }
 
+bool Mouse::LeftDown() noexcept
+{
+	return LeftPress;
+}
+
+bool Mouse::RightDown() noexcept
+{
+	return RightPress;
+}
+
+bool Mouse::MiddleDown() noexcept
+{
+	return MiddlePress;
+}
+
 void Mouse::Reset() noexcept
 {
 	LeftPress = RightPress = MiddlePress = false;

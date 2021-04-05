@@ -2,7 +2,7 @@
 
 
 Window::WindowsProp Window::WindowsProp::Prop;
-Window::Window(int Windowheight, int WindowWidth,const char* WindowName)
+Window::Window(int WindowHeight, int WindowWidth,const char* WindowName)
 	:WindowHeight(WindowHeight)
 	,WindowWidth(WindowWidth)
 {
@@ -11,12 +11,12 @@ Window::Window(int Windowheight, int WindowWidth,const char* WindowName)
 	wr.right = wr.left + WindowWidth;
 	wr.top = 100;
 	wr.bottom = wr.top + WindowHeight;
-	if (!AdjustWindowRect(&wr, WS_CAPTION | WS_SYSMENU | WS_BORDER, false))
+	if (AdjustWindowRectEx(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false,WS_EX_OVERLAPPEDWINDOW)==0)
 	{
 		throw WND_LAST_ERROR();
 	}
-	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_OVERLAPPEDWINDOW, wr.top, wr.left, wr.right-wr.left, wr.bottom - wr.top,
-		nullptr, nullptr, WindowsProp::GetInstance(), this);
+	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT,
+		CW_USEDEFAULT, CW_USEDEFAULT,nullptr, nullptr, WindowsProp::GetInstance(), this);
 	
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
 	if (cond)
