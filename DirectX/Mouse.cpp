@@ -43,6 +43,7 @@ void Mouse::MouseMove(int UpdateX, int UpdateY) noexcept
 	CurrentMousePosY = UpdateY;
 
 	MouseQueue.emplace(MouseEvent(Mouse::MouseEvent::TYPE::Move, *this));
+	TrimBuffer(MouseQueue);
 }
 
 void Mouse::LeftMousePressEvent(int x, int y) noexcept

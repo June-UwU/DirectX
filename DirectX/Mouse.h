@@ -58,7 +58,7 @@ public:
 	void Reset() noexcept;
 	void FlushQueue() noexcept;
 private:
-	Mouse() noexcept;
+	Mouse() = default;
 	Mouse(const Mouse&) = delete;
 	Mouse operator=(const Mouse&) = delete;
 	void MouseMove(int UpdateX, int UpdateY) noexcept;
