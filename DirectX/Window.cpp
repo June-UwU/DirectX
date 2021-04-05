@@ -2,9 +2,20 @@
 
 
 Window::WindowsProp Window::WindowsProp::Prop;
-Window::Window()
+Window::Window(int Windowheight, int WindowWidth,const char* WindowName)
+	:WindowHeight(WindowHeight)
+	,WindowWidth(WindowWidth)
 {
-	handle = CreateWindowEx(0,WindowsProp::GetName(), L"DirectX ", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+	RECT wr{ 0 };
+	wr.left = 100;
+	wr.right = wr.left + WindowWidth;
+	wr.top = 100;
+	wr.bottom = wr.top + WindowHeight;
+	if (!AdjustWindowRect(&wr, WS_CAPTION | WS_SYSMENU | WS_BORDER, false))
+	{
+		throw WND_LAST_ERROR();
+	}
+	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_OVERLAPPEDWINDOW, wr.top, wr.left, wr.right-wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowsProp::GetInstance(), this);
 	
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
@@ -137,7 +148,7 @@ Window::WindowsProp::WindowsProp()
 	
 }
 
-const wchar_t* Window::WindowsProp::GetName()
+const char* Window::WindowsProp::GetName()
 {
 	return WCname;
 }

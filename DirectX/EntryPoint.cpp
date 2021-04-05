@@ -3,7 +3,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 {
 	try
 	{
-		Window window = Window();
+		Window window = Window(720, 1280, "DirectX");
 
 		MSG message;
 		while (GetMessage(&message, window.GetHandle(), 0, 0) > 0)
