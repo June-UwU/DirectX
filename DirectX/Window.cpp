@@ -49,29 +49,75 @@ LRESULT Window::MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
 	LRESULT Result = 0;
 	switch (msg)
 	{
+		/*KEYBOARD MESSAGE HANDLING*/
+	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
 	{
-		kbd.KeyPressedEvent(unsigned char(wParam));
+		if (!(lParam << 30 & 1) || kbd.ENABLE_AUTO_REPEAT)
+		{
+			kbd.KeyPressedEvent(unsigned char(wParam));
+		}
 	}break;
+	case WM_SYSKEYUP:
 	case WM_KEYUP:
 	{
-		kbd.KeyReleasedEvent(unsigned char(wParam));
+ 		kbd.KeyReleasedEvent(unsigned char(wParam));
 	}break;
 	case WM_KILLFOCUS:
 	{
+		kbd.ClearState();
 	}break;
 	case WM_CLOSE:
 	{
 		Result = 0;
 		PostQuitMessage(0);
 	}break;
-	case WM_QUIT:
+	case WM_CHAR:
 	{
-		Result = 0;	
-		PostQuitMessage(0);
+		kbd.CharEvent(wParam);
 	}break;
+	/*MOUSE MESSAGE HANDLING*/
+	case WM_LBUTTONDOWN:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.LeftMousePressEvent(pt.x,pt.y);
+	}break;
+	case WM_LBUTTONUP:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.LeftMouseReleaseEvent(pt.x, pt.y);
+	}break;
+	case WM_MBUTTONDOWN:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.MiddleMousePressEvent(pt.x, pt.y);
+	}break;
+	case WM_MBUTTONUP:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.MiddleMouseReleaseEvent(pt.x, pt.y);
+	}break;
+	case WM_RBUTTONDOWN:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.RightMousePressEvent(pt.x, pt.y);
+	}break;
+	case WM_RBUTTONUP:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.RightMouseReleaseEvent(pt.x, pt.y);
+	}break;
+	case WM_MOUSEMOVE:
+	{
+		POINTS pt = MAKEPOINTS(lParam);
+		mse.MouseMove(pt.x, pt.y);
+	}break;
+
+	default:
+	{
+		Result = DefWindowProc(handle, msg, wParam, lParam);
 	}
-	Result = DefWindowProc(handle, msg, wParam, lParam);
+	}
 	return Result;
 }
 
@@ -102,14 +148,14 @@ HINSTANCE Window::WindowsProp::GetInstance()
 }
 
 Window::Winception::Winception(int line, const char* file, HRESULT hr) noexcept
-	:hr(hr)
-	,Appception(line , file)
+	:Appception(line , file)
+	,hr(hr)
 {
 }
 
 std::string Window::Winception::TranslateHRESULT() const noexcept
 {
-	char* temp = { 0 };
+	char* temp { 0 };
 	DWORD count = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
 		LANG_SYSTEM_DEFAULT,LPSTR(&temp), 0, nullptr);
 	if (count == 0)

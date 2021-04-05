@@ -8,6 +8,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		MSG message;
 		while (GetMessage(&message, window.GetHandle(), 0, 0) > 0)
 		{
+			if (window.kbd.KeyDown(VK_MENU))
+			{
+				MessageBoxA(nullptr, "space pressed", nullptr, MB_OK);
+			}
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}

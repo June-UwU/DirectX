@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "Appception.h"
 #include "KeyBoard.h"
+#include "Mouse.h"
 #define WND_ERROR(hr) Winception(__LINE__,__FILE__,hr)
 class Window
 {
@@ -12,6 +13,7 @@ public:
 	HWND GetHandle();
 public:
 	KeyBoard kbd;
+	Mouse mse;
 private:
 	class Winception : public Appception
 	{

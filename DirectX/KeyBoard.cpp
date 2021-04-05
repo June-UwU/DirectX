@@ -1,5 +1,42 @@
 #include "KeyBoard.h"
 
+bool KeyBoard::KeyDown(unsigned char code) noexcept
+{
+	return Bindings[code];
+}
+
+std::optional<KeyBoard::KeyEvent> KeyBoard::GetEvent() noexcept
+{
+	if (!KeyEventQueue.empty())
+	{
+		KeyEvent Ret = KeyEventQueue.front();
+		KeyEventQueue.pop();
+		return Ret;
+	}
+	return {};
+}
+
+std::optional<char> KeyBoard::GetCharBuffer() noexcept
+{
+	if (!CharQueue.empty()) 
+	{
+		char ret = CharQueue.front();
+		CharQueue.pop();
+		return ret;
+	}
+	return {};
+}
+
+void KeyBoard::FLushCharQueue() noexcept
+{
+	CharQueue = std::queue<char>();
+}
+
+void KeyBoard::FlushEventQueue() noexcept
+{
+	KeyEventQueue = std::queue < KeyBoard::KeyEvent>();
+}
+
 void KeyBoard::KeyPressedEvent(unsigned char code) noexcept
 {
 	Bindings[code] = 1;
@@ -17,6 +54,12 @@ void KeyBoard::KeyReleasedEvent(unsigned char code) noexcept
 void KeyBoard::ClearState() noexcept
 {
 	Bindings.reset();
+}
+
+void KeyBoard::CharEvent(char letter) noexcept
+{
+	CharQueue.push(letter);
+	TrimBuffer(CharQueue);
 }
 
 template<typename T>

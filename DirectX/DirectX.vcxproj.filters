@@ -5,10 +5,12 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Appception.cpp" />
     <ClCompile Include="KeyBoard.cpp" />
+    <ClCompile Include="Mouse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h" />
     <ClInclude Include="Appception.h" />
     <ClInclude Include="KeyBoard.h" />
+    <ClInclude Include="Mouse.h" />
   </ItemGroup>
 </Project>
