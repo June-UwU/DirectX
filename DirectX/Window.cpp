@@ -29,6 +29,22 @@ Window::Window(int WindowHeight, int WindowWidth,const char* WindowName)
 }
 
 
+
+std::optional<int> Window::ProcessMessage()
+{
+	MSG message;
+	while (PeekMessageA(&message,handle, 0, 0, PM_REMOVE))
+	{
+		if (message.message == WM_QUIT)
+		{
+			return message.wParam;
+		}
+		TranslateMessage(&message);
+		DispatchMessageA(&message);
+	}
+	return {};
+}
+
 HWND Window::GetHandle()
 {
 	return handle;

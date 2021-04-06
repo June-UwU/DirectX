@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include <Windows.h>
 #include "Appception.h"
 #include "KeyBoard.h"
@@ -9,6 +10,7 @@ public:
 	Window(int Windowheight,int WindowWidth,const char* WindowName);
 	Window(Window& rhs) = delete;
 	Window operator=(Window& rhs) = delete;
+	std::optional<int> ProcessMessage();
 	HWND GetHandle();
 public:
 	KeyBoard kbd;
