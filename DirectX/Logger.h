@@ -1,4 +1,7 @@
 #pragma once
+#ifdef ENABLE_LOG
+
+#include <sstream>
 #include "Appception.h"
 #include <Windows.h>
 
@@ -27,5 +30,24 @@ private:
 private:
 	HANDLE ConsoleHandle;
 };
-	static Logger Log ;
+static Logger Log ;
+
+#endif //  ENABLE_LOG
+
+#ifdef ENABLE_LOG
+#define LOG_INFO(string) Log.LogWrite(string , Logger::Level::INFO);
+#define LOG_WARN(string) Log.LogWrite(string , Logger::Level::WARN);
+#define LOG_CRIT(string) Log.LogWrite(string , Logger::Level::CRITICAL);
+#endif // ENABLE_LOG
+
+#ifndef ENABLE_LOG
+#define LOG_INFO(string)
+#define LOG_WARN(string)
+#define LOG_CRIT(string) 
+#endif // !ENABLE_LOG
+
+
+
+
+
 

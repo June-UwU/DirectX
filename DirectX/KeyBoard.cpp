@@ -39,6 +39,7 @@ void KeyBoard::FlushEventQueue() noexcept
 
 void KeyBoard::KeyPressedEvent(unsigned char code) noexcept
 {
+	LOG_INFO("KEY PRESS")
 	Bindings[code] = 1;
 	KeyEventQueue.push(KeyBoard::KeyEvent(KeyBoard::KeyEvent::TYPE::Press, code));
 	TrimBuffer(KeyEventQueue);

@@ -1,6 +1,6 @@
 #include "Logger.h"
 
-
+#ifdef ENABLE_LOG
 Logger::Logger()
 {
 	AllocConsole();
@@ -14,28 +14,33 @@ Logger::Logger()
 
 void Logger::LogWrite(std::string log , Level level)
 {
+	std::ostringstream Stream;
 	LPDWORD written=0;
 	switch (level)
 	{
 	case Level::INFO:
 	{
+		Stream << "[INFO]\t:" << log <<std::endl;
 		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_GREEN);
-		WriteFile(ConsoleHandle, log.c_str(), log.size(), written, NULL);
+		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
 	}break;
 	case Level::WARN:
 	{
+		Stream << "[WARN]\t:" << log << std::endl;
 		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-		WriteFile(ConsoleHandle, log.c_str(), log.size(), written, NULL);
+		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
 	}break;
 	case Level::CRITICAL:
 	{
+		Stream << "[CRITICAL]\t:" << log << std::endl;
 		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-		WriteFile(ConsoleHandle, log.c_str(), log.size(), written, NULL);
+		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
 	}break;
 	default:
 	{
+		Stream << "[DATA]\t:" << log << std::endl;
 		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_GREEN |FOREGROUND_BLUE);
-		WriteFile(ConsoleHandle, log.c_str(), log.size(), written, NULL);
+		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
 	}
 	}
 
@@ -82,3 +87,4 @@ HRESULT Logger::Winception::GetError() noexcept
 {
 	return hr;
 }
+#endif
