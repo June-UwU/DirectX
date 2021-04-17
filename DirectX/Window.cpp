@@ -14,14 +14,12 @@ Window::Window(int WindowHeight, int WindowWidth,const char* WindowName)
 	wr.bottom = wr.top + WindowHeight;
 	if (AdjustWindowRectEx(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, false,WS_EX_OVERLAPPEDWINDOW)==0)
 	{
+		LOG_CRIT("CLIENT RECT CORRECTION ERROR")
 		throw WND_LAST_ERROR();
 	}
 	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, CW_USEDEFAULT,nullptr, nullptr, WindowsProp::GetInstance(), this);
-
-	LOG_INFO("initaiates windows" + std::to_string(69)+'\n')
-	LOG_WARN("initaiates windows" + std::to_string(69)+'\n')
-	LOG_CRIT("initaiates windows" + std::to_string(69)+'\n')
+	LOG_INFO("handle created")
 	Gfx = std::make_unique<GraphicsOutput>(handle);
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
 	if (cond)

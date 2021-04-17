@@ -1,4 +1,5 @@
 #pragma once
+#include "Logger.h"
 #include <queue>
 #include <optional>
 #include <utility>

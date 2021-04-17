@@ -36,12 +36,12 @@ void Logger::LogWrite(std::string log , Level level)
 		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
 		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
 	}break;
-	default:
+	case Level::DEF:
 	{
 		Stream << "[DATA]\t:" << log << std::endl;
-		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_GREEN |FOREGROUND_BLUE);
+		SetConsoleTextAttribute(ConsoleHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 		WriteFile(ConsoleHandle, Stream.str().c_str(), Stream.str().size(), written, NULL);
-	}
+	}break;
 	}
 
 }

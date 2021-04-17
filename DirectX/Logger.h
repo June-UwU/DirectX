@@ -11,6 +11,7 @@ public:
 	Logger();
 	enum class Level
 	{
+		DEF,
 		INFO,
 		WARN,
 		CRITICAL
@@ -38,12 +39,14 @@ static Logger Log ;
 #define LOG_INFO(string) Log.LogWrite(string , Logger::Level::INFO);
 #define LOG_WARN(string) Log.LogWrite(string , Logger::Level::WARN);
 #define LOG_CRIT(string) Log.LogWrite(string , Logger::Level::CRITICAL);
+#define LOG_DEF(string) Log.LogWrite(string , Logger::Level::DEF);
 #endif // ENABLE_LOG
 
 #ifndef ENABLE_LOG
 #define LOG_INFO(string)
 #define LOG_WARN(string)
-#define LOG_CRIT(string) 
+#define LOG_CRIT(string)
+#define LOG_DEF(string)
 #endif // !ENABLE_LOG
 
 
