@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <string>
 
 
 Window::WindowsProp Window::WindowsProp::Prop;
@@ -18,10 +19,11 @@ Window::Window(int WindowHeight, int WindowWidth,const char* WindowName)
 	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, CW_USEDEFAULT,nullptr, nullptr, WindowsProp::GetInstance(), this);
 
-	AllocConsole();
-
+	//Log.init();
+	int var = 69;
+	Log.LogWrite("Initiated Handle \n" ,Logger::Level::INFO);;
 	Gfx = std::make_unique<GraphicsOutput>(handle);
-	
+	Log.LogWrite("Initiated Handle",Logger::Level::WARN);
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
 	if (cond)
 	{

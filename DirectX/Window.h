@@ -3,6 +3,7 @@
 #include "KeyBoard.h"
 #include "Mouse.h"
 #include "GraphicsOutput.h"
+#include "Logger.h"
 #include <optional>
 #include <memory>
 #include <Windows.h>
