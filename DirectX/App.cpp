@@ -7,6 +7,8 @@ App::App()
 
 void App::DoFrame()
 {
+	window.Graphics().ClearBackBuffer(0, 0, 1000);
+	window.Graphics().EndFrame();
 }
 
 int App::Run()

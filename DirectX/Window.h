@@ -1,9 +1,11 @@
 #pragma once
-#include <optional>
-#include <Windows.h>
 #include "Appception.h"
 #include "KeyBoard.h"
 #include "Mouse.h"
+#include "GraphicsOutput.h"
+#include <optional>
+#include <memory>
+#include <Windows.h>
 class Window
 {
 public:
@@ -12,6 +14,7 @@ public:
 	Window operator=(Window& rhs) = delete;
 	std::optional<int> ProcessMessage();
 	HWND GetHandle();
+	GraphicsOutput& Graphics();
 public:
 	KeyBoard kbd;
 	Mouse mse;
@@ -45,6 +48,7 @@ private:
 	static LRESULT CALLBACK Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK Tans(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT MessHandle(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam);
+	std::unique_ptr<GraphicsOutput> Gfx;
 	HWND handle;
 };
 

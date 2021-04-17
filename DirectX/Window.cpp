@@ -17,6 +17,8 @@ Window::Window(int WindowHeight, int WindowWidth,const char* WindowName)
 	}
 	handle = CreateWindowExA(0,WindowsProp::GetName(), WindowName, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, CW_USEDEFAULT,nullptr, nullptr, WindowsProp::GetInstance(), this);
+
+	Gfx = std::make_unique<GraphicsOutput>(handle);
 	
 	/*BOOL cond = SetProcessPreferredUILanguages(0X1001, NULL, 0);
 	if (cond)
@@ -48,6 +50,11 @@ std::optional<int> Window::ProcessMessage()
 HWND Window::GetHandle()
 {
 	return handle;
+}
+
+GraphicsOutput& Window::Graphics()
+{
+	return *Gfx;
 }
 
 LRESULT Window::Proc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam)
