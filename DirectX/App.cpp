@@ -1,5 +1,6 @@
 #include "App.h"
 
+
 App::App()
 	:window(720,1280,"DirectX")
 {
@@ -7,7 +8,8 @@ App::App()
 
 void App::DoFrame()
 {
-	window.Graphics().ClearBackBuffer(0, 0, 1000);
+	const float var = sin(Chrono.Peek()) / 2.0f + 0.5f;
+	window.Graphics().ClearBackBuffer(var, var, 0);
 	window.Graphics().EndFrame();
 }
 
