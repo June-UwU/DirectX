@@ -1,4 +1,5 @@
 #pragma once
+#include "Logger.h"
 #include <d3d11.h>
 class GraphicsOutput
 {
