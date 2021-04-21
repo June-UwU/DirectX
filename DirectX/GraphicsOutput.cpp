@@ -2,6 +2,8 @@
 
 #pragma comment(lib,"d3d11.lib")
 
+#define GFX_THROW_FAILED(hrcall) if(FAILED(hr = hrcall)) throw GraphicsOutput::Hrception(__LINE__,__FILE__,hrcall)
+
 GraphicsOutput::GraphicsOutput(HWND handle)
 {
 	LOG_INFO("Initiated Graphics OutPut")
@@ -23,7 +25,9 @@ GraphicsOutput::GraphicsOutput(HWND handle)
 	Descriptor.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;//swaping method
 	Descriptor.Flags = 0;
 
-	D3D11CreateDeviceAndSwapChain(
+	HRESULT hr;
+
+	GFX_THROW_FAILED(D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -36,47 +40,25 @@ GraphicsOutput::GraphicsOutput(HWND handle)
 		&Device,
 		nullptr,
 		&DeviceContext
-	);
+	));
 
-	ID3D11Resource* BackBuffer = nullptr;
+	Microsoft::WRL::ComPtr <ID3D11Resource> BackBuffer = nullptr;
 
-	SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&BackBuffer));
+	GFX_THROW_FAILED(SwapChain->GetBuffer(0, __uuidof(ID3D11Resource),&BackBuffer));
 	LOG_DEF("Allocating Back Buffer")
 	LOG_DEF("SIZE\t: [" + std::to_string(sizeof(BackBuffer)) +"]")
 
-	Device->CreateRenderTargetView(BackBuffer, nullptr, &Target);
+	GFX_THROW_FAILED ( Device->CreateRenderTargetView(BackBuffer.Get(), nullptr, &Target));
 
 	BackBuffer->Release();
 	LOG_DEF("Released Back Buffer")
 }
 
-GraphicsOutput::~GraphicsOutput()
-{
-	if (Device)
-	{
-		Device->Release();
-		LOG_DEF("Released Graphics Device")
-	}
-	if (SwapChain)
-	{
-		SwapChain->Release();
-		LOG_DEF("Released Swap Chain")
-	}
-	if (DeviceContext)
-	{
-		DeviceContext->Release();
-		LOG_DEF("Released Device Context")
-	}
-	if (Target)
-	{
-		Target->Release();
-		LOG_DEF("Released Target")
-	}
-}
 
 void GraphicsOutput::EndFrame()
 {
-	SwapChain->Present(1u, 0);
+	HRESULT hr;
+	GFX_THROW_FAILED (SwapChain->Present(1u, 0));
 	LOG_DEF("Presenting Swap Chain")
 }
 
@@ -92,5 +74,46 @@ void GraphicsOutput::ClearBackBuffer(float Red, float Green, float Blue) noexcep
 	LOG_INFO("Clearing BackBuffer")
 	LOG_INFO("RED :" +std::to_string(Red)+" GREEN :" + std::to_string(Green) + " BLUE :" + std::to_string(Blue) + " AA :" + std::to_string(Color[3])  )
 
-	DeviceContext->ClearRenderTargetView(Target, Color);
+	DeviceContext->ClearRenderTargetView(Target.Get(), Color);
+}
+
+
+GraphicsOutput::Hrception::Hrception(int line, const char* file, HRESULT hr) noexcept
+	:Appception(line, file)
+	, hr(hr)
+{
+}
+
+std::string GraphicsOutput::Hrception::TranslateHRESULT() const noexcept
+{
+	char* temp{ 0 };
+	DWORD count = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr,
+		LANG_SYSTEM_DEFAULT, LPSTR(&temp), 0, nullptr);
+	if (count == 0)
+	{
+		return "unidentified error";
+	}
+	std::string ErrorString = temp;
+
+	LocalFree(temp);
+
+	return ErrorString;
+}
+
+const char* GraphicsOutput::Hrception::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << "GRAPHICS ERROR!" << std::endl
+		<< "[CODE] 0x" << std::hex << hr << std::endl
+		<< "[DESCRIPTION]" << TranslateHRESULT() << std::endl
+		<< "[LINE]" << std::dec << (unsigned int)GetLine() << std::endl
+		<< "[FILE]" << GetFile() << std::endl;
+	data = oss.str();
+	return data.c_str();
+}
+
+
+HRESULT GraphicsOutput::Hrception::GetError() noexcept
+{
+	return hr;
 }

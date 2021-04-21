@@ -18,7 +18,7 @@ public:
 	GraphicsOutput& Graphics();
 public:
 	KeyBoard kbd;
-	Mouse mse;
+	Mouse    mse;
 private:
 	class Winception : public Appception
 	{

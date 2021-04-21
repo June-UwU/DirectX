@@ -40,21 +40,21 @@ public:
 	bool KeyDown(unsigned char code) noexcept;
 	std::optional<KeyBoard::KeyEvent> GetEvent() noexcept;
 	std::optional<char> GetCharBuffer() noexcept;
-	void FLushCharQueue() noexcept;
+	void FLushCharQueue()  noexcept;
 	void FlushEventQueue() noexcept;
 	//auto repeat variable
 	bool ENABLE_AUTO_REPEAT = 1;
 private:
-	static const unsigned int MAX_BITSET_LENGTH = 256u;
-	static const unsigned int MAX_QUEUE_LENGTH = 16u;
+	static const unsigned int	   MAX_BITSET_LENGTH = 256u;
+	static const unsigned int      MAX_QUEUE_LENGTH  = 16u;
 	std::bitset<MAX_BITSET_LENGTH> Bindings;
-	std::queue<char> CharQueue ;
+	std::queue<char>			   CharQueue ;
 	std::queue<KeyBoard::KeyEvent> KeyEventQueue ;
 private:
-	void KeyPressedEvent(unsigned char code) noexcept;
+	void KeyPressedEvent(unsigned char code)  noexcept;
 	void KeyReleasedEvent(unsigned char code) noexcept;
-	void CharEvent(char letter) noexcept;
-	void ClearState() noexcept;
+	void CharEvent(char letter)				  noexcept;
+	void ClearState()						  noexcept;
 	template <typename T>
 	static void TrimBuffer(std::queue<T>& Buffer) noexcept;
 };

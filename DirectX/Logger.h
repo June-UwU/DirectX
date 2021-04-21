@@ -39,7 +39,7 @@ static Logger Log ;
 #define LOG_INFO(string) Log.LogWrite(string , Logger::Level::INFO);
 #define LOG_WARN(string) Log.LogWrite(string , Logger::Level::WARN);
 #define LOG_CRIT(string) Log.LogWrite(string , Logger::Level::CRITICAL);
-#define LOG_DEF(string) Log.LogWrite(string , Logger::Level::DEF);
+#define LOG_DEF(string)  Log.LogWrite(string , Logger::Level::DEF);
 #endif // ENABLE_LOG
 
 #ifndef ENABLE_LOG

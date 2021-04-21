@@ -77,11 +77,11 @@ private:
 	void TrimBuffer(std::queue<MouseEvent>& buffer) noexcept;
 private:
 	static constexpr int MAX_QUEUE_SIZE = 16u;
-	bool LeftPress = false;
-	bool RightPress = false;
-	bool MiddlePress = false;
-	int CurrentMousePosX;
-	int CurrentMousePosY;
+	bool LeftPress    = false;
+	bool RightPress	  = false;
+	bool MiddlePress  = false;
+	int  CurrentMousePosX;
+	int	 CurrentMousePosY;
 	std::queue<MouseEvent> MouseQueue;
 };
 
